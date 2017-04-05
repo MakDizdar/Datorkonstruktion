@@ -1,10 +1,3 @@
---------------------------------------------------------------------------------
--- VGA MOTOR
--- Anders Nilsson
--- 16-feb-2016
--- Version 1.1
-
-
 -- library declaration
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;            -- basic IEEE library
