@@ -1,9 +1,3 @@
---------------------------------------------------------------------------------
--- PICT MEM
--- Anders Nilsson
--- 16-feb-2016
--- Version 1.1
-
 
 -- library declaration
 library IEEE;
