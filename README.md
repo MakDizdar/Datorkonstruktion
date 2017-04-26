@@ -17,7 +17,7 @@ doc/ documentation
 
 **Compilation and Synthetization**
 
-Look at any Makefile in any directory.
+Look at any Makefile in any directory..
 
 
 
