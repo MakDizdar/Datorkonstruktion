@@ -83,6 +83,8 @@ begin
         uPC <= uAddr;
       elsif (SEQ = "1111") then
         HALT <= '0';
+      else
+        uPC <= uPC + 1;
       end if;
     end if;
   end process;
