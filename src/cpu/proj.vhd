@@ -49,7 +49,7 @@ architecture Behavioral of proj is
   signal ASR : unsigned(31 downto 0); -- Address Register
   signal IR : unsigned(31 downto 0); -- Instruction Register
   signal DATA_BUS : unsigned(31 downto 0); -- Data Bus
-  signal AR : unsigned(31 downto 0); -- stores alu operated values
+  signal AR : unsigned(32 downto 0); -- stores alu operated values
   signal GRx : unsigned(3 downto 0) ; -- grx part in pm
   signal OP : unsigned(3 downto 0); -- Oeration part in pm
   signal GRx0 : unsigned(31 downto 0); 		
@@ -60,7 +60,9 @@ architecture Behavioral of proj is
   signal L , N, Z : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
-
+  signal AR_TEMP : std_logic := :='0';  -- temporary value for MSB in AR
+  signal O : std_logic := '0';          -- O flag for overflow
+  signal C : std_logic := '0';          -- C flag for carry
 begin
 
   -- mPC : micro Program Counter
@@ -159,7 +161,7 @@ begin
      if rising_edge(clk) then
 	if (rst ='1') then
 	  LC_REG <= (others => '0');
-          
+          L <= '0';
 	elsif (LC = "01") then 
 	  LC_REG <= LC_REG - 1;
           if (LC_REG = 0 ) then
@@ -193,8 +195,10 @@ begin
     if rising_edge(clk) then
         if (rst ='1' or ALU = "0011") then
   	  AR <= (others => '0');
+          Z <= '1';
+          N <= '0';
  	elsif (ALU= "0001") then
-	  AR <= DATA_BUS;
+	  AR <= ('0' & DATA_BUS);
           if (signed(AR) < 0) then
             N <= '1';
           elsif (AR = 0) then
@@ -205,7 +209,18 @@ begin
           end if;
         
 	elsif (ALU ="0100") then
-	  AR <= AR + DATA_BUS;
+          AR_TEMP <= AR(31);
+	  AR <= AR + ('0' & DATA_BUS);
+          if ((AR(31)/=AR_TEMP) and (AR(31)/= DATA_BUS(31))) then
+            O <= '1';
+          else
+            O <= '0';
+          end if;
+          if (AR(32)='1') then
+            C <='1';
+          else
+            C <= '0';
+          end if;
           if (signed(AR) < 0) then
             N <= '1';
           elsif (AR = 0) then
@@ -216,7 +231,12 @@ begin
           end if;
           
 	elsif (ALU ="0101") then
-	  AR <= AR - DATA_BUS;
+	  AR <= AR - ('0' & DATA_BUS);
+          if (AR(32)='1') then
+            C <='1';
+          else
+            C <= '0';
+          end if;
           if (signed(AR) < 0) then
             N <= '1';
           elsif (AR = 0) then
@@ -227,7 +247,9 @@ begin
           end if;
           
 	elsif (ALU = "0110") then
-	  AR <= AR and DATA_BUS ;
+          O <= '0';                     -- ???? checka senare om rätt
+          C <= '0';
+	  AR <= AR and ('0' & DATA_BUS);
           if (signed(AR) < 0) then
             N <= '1';
           elsif (AR = 0) then
@@ -238,7 +260,9 @@ begin
           end if;
             
 	elsif (ALU = "0111") then
-	  AR <= AR or DATA_BUS;
+          O <= '0';
+          C <='0';
+	  AR <= AR or ('0' & DATA_BUS);
           if (signed(AR) < 0) then
             N <= '1';
           elsif (AR = 0) then
@@ -259,6 +283,9 @@ begin
 
   -- K1 memory component connection
   U2 : K1 port map(operand => OP, K1_adress => K1_reg);
+
+
+
   
   -- micro memory signal assignments
   
