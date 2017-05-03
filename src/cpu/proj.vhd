@@ -83,6 +83,10 @@ begin
         uPC <= uAddr;
       elsif (SEQ = "1100" and L='1') then
         uPC <= uAddr;
+      elsif (SEQ ="1010" and C = '1') then
+        uPC <= uAddr;
+      elsif (SEQ="1011" and O = '1') then
+        uPC <= uAddr;
       elsif (SEQ = "1111") then
         HALT <= '0';
       else
