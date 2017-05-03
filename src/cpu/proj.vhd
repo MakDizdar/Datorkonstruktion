@@ -57,12 +57,11 @@ architecture Behavioral of proj is
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0); 	
   signal LC_REG : unsigned(7 downto 0); -- register holding loop value
-  signal L , N, Z : std_logic := '0';    -- flags
+  signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
-  signal AR_TEMP : std_logic := :='0';  -- temporary value for MSB in AR
-  signal O : std_logic := '0';          -- O flag for overflow
-  signal C : std_logic := '0';          -- C flag for carry
+  signal AR_TEMP : std_logic :='0';  -- temporary value for MSB in AR
+
 begin
 
   -- mPC : micro Program Counter
