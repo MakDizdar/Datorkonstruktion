@@ -1,0 +1,234 @@
+Release 12.4 - xst M.81d (lin64)
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to tmpdir
+
+
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.12 secs
+ 
+--> 
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "design.prj"
+
+---- Target Parameters
+Output File Name                   : "design.ngc"
+Target Device                      : xc6slx16-3-csg324
+
+---- Source Options
+Top Module Name                    : proj
+
+=========================================================================
+
+WARNING:Xst:29 - Optimization Effort not specified
+The following parameters have been added:
+Optimization Goal                  : SPEED
+
+=========================================================================
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Parsing VHDL file "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../proj.vhd" into library work
+Parsing entity <proj>.
+Parsing architecture <Behavioral> of entity <proj>.
+Parsing VHDL file "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../uMem.vhd" into library work
+Parsing entity <uMem>.
+Parsing architecture <Behavioral> of entity <umem>.
+Parsing VHDL file "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../pMem.vhd" into library work
+Parsing entity <pMem>.
+Parsing architecture <Behavioral> of entity <pmem>.
+Parsing VHDL file "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../K1.vhd" into library work
+Parsing entity <K1>.
+Parsing architecture <Behavioral> of entity <k1>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating entity <proj> (architecture <Behavioral>) from library <work>.
+WARNING:HDLCompiler:92 - "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../proj.vhd" Line 100: halt should be on the sensitivity list of the process
+
+Elaborating entity <uMem> (architecture <Behavioral>) from library <work>.
+
+Elaborating entity <pMem> (architecture <Behavioral>) from library <work>.
+
+Elaborating entity <K1> (architecture <Behavioral>) from library <work>.
+WARNING:HDLCompiler:1127 - "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../proj.vhd" Line 306: Assignment to pm_adr ignored, since the identifier is never used
+WARNING:Xst:2972 - "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd" line 282. All outputs of instance <U0> of block <uMem> are unconnected in block <proj>. Underlying logic will be removed.
+WARNING:Xst:2972 - "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd" line 285. All outputs of instance <U1> of block <pMem> are unconnected in block <proj>. Underlying logic will be removed.
+WARNING:Xst:2972 - "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd" line 288. All outputs of instance <U2> of block <K1> are unconnected in block <proj>. Underlying logic will be removed.
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <proj>.
+    Related source file is "/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd".
+    Summary:
+	no macro.
+Unit <proj> synthesized.
+RTL-Simplification CPUSTAT: 0.00 
+RTL-BasicInf CPUSTAT: 0.00 
+RTL-BasicOpt CPUSTAT: 0.00 
+RTL-Remain-Bus CPUSTAT: 0.00 
+
+=========================================================================
+HDL Synthesis Report
+
+Found no macro
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Found no macro
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <proj> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 0) on block proj, actual ratio is 0.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Found no macro
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Top Level Output File Name         : design.ngc
+
+Primitive and Black Box Usage:
+------------------------------
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 6slx16csg324-3 
+
+
+Slice Logic Utilization: 
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:      0
+   Number with an unused Flip Flop:       0  out of      0         
+   Number with an unused LUT:             0  out of      0         
+   Number of fully used LUT-FF pairs:     0  out of      0         
+   Number of unique control sets:         0
+
+IO Utilization: 
+ Number of IOs:                           2
+ Number of bonded IOBs:                   0  out of    232     0%  
+
+Specific Feature Utilization:
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+Timing Report
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+No clock signals found in this design
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -3
+
+   Minimum period: No path found
+   Minimum input arrival time before clock: No path found
+   Maximum output required time after clock: No path found
+   Maximum combinational path delay: No path found
+
+Timing Details:
+---------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+
+Cross Clock Domains Report:
+--------------------------
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 4.00 secs
+Total CPU time to Xst completion: 3.27 secs
+ 
+--> 
+
+
+Total memory usage is 450992 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    6 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

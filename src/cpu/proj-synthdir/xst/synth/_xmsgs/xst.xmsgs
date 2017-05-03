@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="HDLCompiler" num="92" delta="new" >"/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../proj.vhd" Line 100: <arg fmt="%s" index="1">halt</arg> should be on the sensitivity list of the process
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1127" delta="new" >"/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/xst/synth/../../../proj.vhd" Line 306: Assignment to <arg fmt="%s" index="1">pm_adr</arg> ignored, since the identifier is never used
+</msg>
+
+<msg type="warning" file="Xst" num="2972" delta="new" >&quot;<arg fmt="%s" index="1">/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd</arg>&quot; line <arg fmt="%d" index="2">282</arg>. All outputs of instance &lt;<arg fmt="%s" index="3">U0</arg>&gt; of block &lt;<arg fmt="%s" index="4">uMem</arg>&gt; are unconnected in block &lt;<arg fmt="%s" index="5">proj</arg>&gt;. Underlying logic will be removed.
+</msg>
+
+<msg type="warning" file="Xst" num="2972" delta="new" >&quot;<arg fmt="%s" index="1">/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd</arg>&quot; line <arg fmt="%d" index="2">285</arg>. All outputs of instance &lt;<arg fmt="%s" index="3">U1</arg>&gt; of block &lt;<arg fmt="%s" index="4">pMem</arg>&gt; are unconnected in block &lt;<arg fmt="%s" index="5">proj</arg>&gt;. Underlying logic will be removed.
+</msg>
+
+<msg type="warning" file="Xst" num="2972" delta="new" >&quot;<arg fmt="%s" index="1">/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj.vhd</arg>&quot; line <arg fmt="%d" index="2">288</arg>. All outputs of instance &lt;<arg fmt="%s" index="3">U2</arg>&gt; of block &lt;<arg fmt="%s" index="4">K1</arg>&gt; are unconnected in block &lt;<arg fmt="%s" index="5">proj</arg>&gt;. Underlying logic will be removed.
+</msg>
+
+</messages>
+

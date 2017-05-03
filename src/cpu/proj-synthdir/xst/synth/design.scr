@@ -1,0 +1,6 @@
+set -tmpdir tmpdir
+run -ifn design.prj
+-ofn design.ngc
+-top proj
+-p xc6slx16-3-csg324
+

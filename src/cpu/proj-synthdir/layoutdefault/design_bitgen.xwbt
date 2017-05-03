@@ -1,0 +1,7 @@
+INFILE=/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/layoutdefault/design.ncd
+OUTFILE=/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/layoutdefault/design.bit
+FAMILY=Spartan6
+PART=xc6slx16-3csg324
+WORKINGDIR=/edu/iliay038/Desktop/Datorkonstruktion/src/cpu/proj-synthdir/layoutdefault
+LICENSE=ISE
+USER_INFO=1777494980_210567422_043

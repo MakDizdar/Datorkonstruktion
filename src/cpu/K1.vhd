@@ -14,16 +14,16 @@ architecture Behavioral of K1 is
 -- K1 Memory
 type K1_mem_t is array (0 to 15) of unsigned(7 downto 0);
 constant K1_mem_c : K1_mem_t :=
-  (x"03",       --0: LOAD
-   x"05",       --1: HALT
-   x"00",
-   x"00",
-   x"00",
-   x"00",
-   x"00",
-   x"00",
-   x"00",
-   x"00",
+  (x"03",                               --:00 LOAD
+   x"05",                               --:01 HALT
+   x"07",                               --:02 STORE
+   x"09",                               --:03 ADD
+   x"0D",                               --:04 SUB
+   x"11",                               --:05 AND
+   x"15",                               --:06 BRA
+   x"17",                               --:07 CMP
+   x"1A",                               --:08 BNE
+   x"1E",                               --:09 BGE
    x"00",
    x"00",
    x"00",
