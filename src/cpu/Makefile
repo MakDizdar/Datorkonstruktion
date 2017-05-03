@@ -34,7 +34,7 @@ PART=xc6slx16-3-csg324
 
 
 proj.%: S=proj.vhd uMem.vhd pMem.vhd K1.vhd
-#proj.%: T=proj_tb.vhd
+proj.%: T=proj_tb.vhd
 proj.%: U=Nexys3_Master.ucf
 
 
