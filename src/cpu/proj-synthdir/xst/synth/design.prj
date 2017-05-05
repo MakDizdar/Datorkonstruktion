@@ -1,4 +1,0 @@
-vhdl work "../../../proj.vhd"
-vhdl work "../../../uMem.vhd"
-vhdl work "../../../pMem.vhd"
-vhdl work "../../../K1.vhd"
