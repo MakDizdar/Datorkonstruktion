@@ -128,8 +128,8 @@ begin
     if rising_edge(clk) then
       if (rst = '1') then
         ASR <= (others => '0');
-      elsif (FB = "100") then
-        ASR <= DATA_BUS;
+      elsif (FB = "111") then
+        ASR <= x"0000" & DATA_BUS(15 downto 0);
       end if;
     end if;
   end process;
@@ -301,9 +301,9 @@ begin
   ALU <= uM(24 downto 21);       
   	
   -- primary memory signal assignment
-  GRx <= pM(27 downto 24);
-  OP <= pM(31 downto 28);
-  PM_ADR <= pM(15 downto 0);
+  GRx <= IR(27 downto 24);
+  OP <= IR(31 downto 28);
+  PM_ADR <= IR(15 downto 0);
   -- data bus assignment
   DATA_BUS <= IR when (TB = "001") else
     PM when (TB = "010") else
