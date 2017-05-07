@@ -18,11 +18,12 @@ architecture Behavioral of proj is
   end component;
 
   -- program Memory component
-  component pMem
-    port(pAddr : in unsigned(31 downto 0);
-         pData : out unsigned(31 downto 0));
-  end component;
-
+ -- component pMem
+   -- port(pAddr : in unsigned(31 downto 0);
+     --    pData : out unsigned(31 downto 0));
+ -- end component;
+  
+  
   -- K1 memory component
   component K1
     port(operand: in unsigned(3 downto 0);
@@ -62,8 +63,53 @@ architecture Behavioral of proj is
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
   signal AR_TEMP : std_logic :='0';  -- temporary value for MSB in AR
 
+
+
+  -----------------------------------------------------------------------------
+  -- PRIMARY MEMMORY
+  -----------------------------------------------------------------------------
+  type p_mem_t is array (0 to 500) of unsigned(31 downto 0);
+  constant p_mem_c : p_mem_t :=
+    (x"00000003",                         --load 10 in gr0
+     x"20000004",                         -- subtract 4 from gr0
+     x"30000005",                         --add 3 to gr1
+     x"00000008",
+     x"00000006",
+     x"00000002",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     x"00000000",
+     others => (others => '0'));
+
+  signal p_mem : p_mem_t := p_mem_c;
+
+ 
+
+-------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+  
 begin
 
+  
   -- mPC : micro Program Counter
   process(clk)
   begin
@@ -120,7 +166,7 @@ begin
         IR <= DATA_BUS;
       end if;
     end if;
-  end process;
+  end pRocess;
 	
   -- ASR : Address Register
   process(clk)
@@ -134,6 +180,17 @@ begin
     end if;
   end process;
 
+  -- PM
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if (FB ="010") then
+        p_mem(to_integer(ASR)) <= DATA_BUS;
+      
+      end if;
+    end if;
+  end process;
+  
   -- GRx: general register
   process(clk)
   begin
@@ -282,7 +339,7 @@ begin
   U0 : uMem port map(uAddr=>uPC, uData=>uM);
 
   -- program memory component connection
-  U1 : pMem port map(pAddr=>ASR, pData=>PM);
+ -- U1 : pMem port map(pAddr=>ASR, pData=>PM_TEMP);
 
   -- K1 memory component connection
   U2 : K1 port map(operand => OP, K1_adress => K1_reg);
@@ -301,6 +358,7 @@ begin
   ALU <= uM(24 downto 21);       
   	
   -- primary memory signal assignment
+  PM <= p_mem(to_integer(ASR));
   GRx <= IR(27 downto 24);
   OP <= IR(31 downto 28);
   PM_ADR <= IR(15 downto 0);
@@ -308,7 +366,7 @@ begin
   DATA_BUS <= IR when (TB = "001") else
     PM when (TB = "010") else
     PC when (TB = "011") else
-    ASR when (TB = "100") else
+    AR(31 downto 0) when (TB = "100") else
     GRx0 when (TB ="110" and GRx = 0) else
     GRx1 when (TB ="110" and GRx = 1) else
     GRx2 when (TB ="110" and GRx = 2) else
