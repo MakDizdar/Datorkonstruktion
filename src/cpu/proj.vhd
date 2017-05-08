@@ -57,7 +57,7 @@ architecture Behavioral of proj is
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0); 	
-  signal LC_REG : unsigned(7 downto 0); -- register holding loop value
+  signal LC_REG : unsigned(7 downto 0):= x"00" ; -- register holding loop value
   signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
@@ -70,12 +70,12 @@ architecture Behavioral of proj is
   -----------------------------------------------------------------------------
   type p_mem_t is array (0 to 500) of unsigned(31 downto 0);
   constant p_mem_c : p_mem_t :=
-    (x"00000003",                         --load 10 in gr0
-     x"20000004",                         -- subtract 4 from gr0
-     x"30000005",                         --add 3 to gr1
-     x"00000008",
-     x"00000006",
+    (x"00000002",                         --load 10 in gr0
+     x"60000003",                         -- subtract 4 from gr0
+     x"00000004",                         --add 3 to gr1
      x"00000002",
+     x"00000000",
+     x"00000000",
      x"00000000",
      x"00000000",
      x"00000000",
@@ -215,39 +215,7 @@ begin
   end process;	
  
 
-  -- LC: LC counter
-  process(clk)
-  begin
-     if rising_edge(clk) then
-	if (rst ='1') then
-	  LC_REG <= (others => '0');
-          L <= '0';
-	elsif (LC = "01") then 
-	  LC_REG <= LC_REG - 1;
-          if (LC_REG = 0 ) then
-            L <= '1';
-          else
-            L <= '0';
-          end if;
-          
-	elsif (LC = "10") then
-	  LC_REG <= DATA_BUS(7 downto 0);
-          if (LC_REG = 0 ) then
-            L <= '1';
-          else
-            L <= '0';
-          end if;
-          
-	elsif (LC = "11") then
-	  LC_REG <= uAddr;
-          if (LC_REG = 0 ) then
-            L <= '1';
-          else
-            L <= '0';
-          end if;
-	end if;
-     end if;
-  end process;
+
 
  -- ALU  
  process(clk)
@@ -338,14 +306,20 @@ begin
   -- micro memory component connection
   U0 : uMem port map(uAddr=>uPC, uData=>uM);
 
-  -- program memory component connection
- -- U1 : pMem port map(pAddr=>ASR, pData=>PM_TEMP);
+  -- KEYBOARD memory component connection
+ -- 
 
   -- K1 memory component connection
   U2 : K1 port map(operand => OP, K1_adress => K1_reg);
 
 
+  -- LC components
 
+  LC_REG <= (LC_REG - 1) when (LC ="01") else
+            (DATA_BUS(7 downto 0)) when (LC ="10") else
+            uAddr when (LC = "11") else LC_REG;
+  L <= '1' when (LC_REG = 0 ) else '0';
+  
   
   -- micro memory signal assignments
   

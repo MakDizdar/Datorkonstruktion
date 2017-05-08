@@ -24,7 +24,7 @@ constant K1_mem_c : K1_mem_t :=
    x"17",                               --:07 CMP
    x"1A",                               --:08 BNE
    x"1E",                               --:09 BGE
-   x"00",
+   x"24",                               --:A MULU      
    x"00",
    x"00",
    x"00",

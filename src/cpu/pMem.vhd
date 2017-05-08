@@ -16,10 +16,7 @@ type p_mem_t is array (0 to 500) of unsigned(31 downto 0);
 constant p_mem_c : p_mem_t :=
   (x"00000002",                         --load 10 in gr0
    x"00000000",                         -- subtract 4 from gr0
-   x"00000001",                         --add 3 to gr1
-   x"00000000",
-   x"00000000",
-   x"00000000",
+   x"00000004",                         --add 3 to gr1
    x"00000000",
    x"00000000",
    x"00000000",
