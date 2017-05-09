@@ -50,14 +50,14 @@ architecture Behavioral of proj is
   signal ASR : unsigned(31 downto 0); -- Address Register
   signal IR : unsigned(31 downto 0); -- Instruction Register
   signal DATA_BUS : unsigned(31 downto 0); -- Data Bus
-  signal AR : unsigned(32 downto 0); -- stores alu operated values
+  signal AR : unsigned(32 downto 0) := ('0' & x"00000000"); -- stores alu operated values
   signal GRx : unsigned(3 downto 0) ; -- grx part in pm
   signal OP : unsigned(3 downto 0); -- Oeration part in pm
   signal GRx0 : unsigned(31 downto 0); 		
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0); 	
-  signal LC_REG : unsigned(7 downto 0):= x"00" ; -- register holding loop value
+  signal LC_REG : unsigned(7 downto 0):= x"00"; -- register holding loop value
   signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
@@ -70,14 +70,14 @@ architecture Behavioral of proj is
   -----------------------------------------------------------------------------
   type p_mem_t is array (0 to 500) of unsigned(31 downto 0);
   constant p_mem_c : p_mem_t :=
-    (x"00000002",                         --load 10 in gr0
-     x"60000003",                         -- subtract 4 from gr0
-     x"00000004",                         --add 3 to gr1
-     x"00000002",
-     x"00000000",
-     x"00000000",
-     x"00000000",
-     x"00000000",
+    (x"00000003",                         --load 10 in gr0
+     x"70000004",                         -- subtract 4 from gr0
+     x"80000005",                         --add 3 to gr1
+     x"00000004",
+     x"00000004",
+     x"00000007",
+     x"00000004",
+     x"30000006",
      x"00000000",
      x"00000000",
      x"00000000",
@@ -216,92 +216,49 @@ begin
  
 
 
+ --LC
+ process(clk)
+   begin
+     if rising_edge(clk) then
+       if (rst='1') then
+         LC_REG <= (others => '0');
+       elsif (LC = "01") then
+         LC_REG <= LC_REG - 1;
+       elsif (LC = "10") then
+         LC_REG <= DATA_BUS(7 downto 0);
+       elsif (LC ="11") then
+         LC_REG <= uAddr;
+       end if;
+     end if;
+ end process;
 
  -- ALU  
  process(clk)
  begin
     if rising_edge(clk) then
-        if (rst ='1' or ALU = "0011") then
-  	  AR <= (others => '0');
-          Z <= '1';
-          N <= '0';
- 	elsif (ALU= "0001") then
-	  AR <= ('0' & DATA_BUS);
-          if (signed(AR) < 0) then
-            N <= '1';
-          elsif (AR = 0) then
-            Z <= '1';
-          else
-            N <= '0';
-            Z <= '0';
-          end if;
+
+      if (rst ='1' or ALU = "0011") then
+        AR <= (others => '0');
+      elsif (ALU= "0001") then
+        AR <= ('0' & DATA_BUS);
         
-	elsif (ALU ="0100") then
-          AR_TEMP <= AR(31);
-	  AR <= AR + ('0' & DATA_BUS);
-          if ((AR(31)/=AR_TEMP) and (AR(31)/= DATA_BUS(31))) then
-            O <= '1';
-          else
-            O <= '0';
-          end if;
-          if (AR(32)='1') then
-            C <='1';
-          else
-            C <= '0';
-          end if;
-          if (signed(AR) < 0) then
-            N <= '1';
-          elsif (AR = 0) then
-            Z <= '1';
-          else
-            N <= '0';
-            Z <= '0';
-          end if;
+      elsif (ALU ="0100") then
+        AR <= AR + ('0' & DATA_BUS);
+     
+     
+        
+      elsif (ALU ="0101") then
+        AR <= AR - ('0' & DATA_BUS);
+       
+      elsif (ALU = "0110") then
+        AR <= AR and ('0' & DATA_BUS);
           
-	elsif (ALU ="0101") then
-	  AR <= AR - ('0' & DATA_BUS);
-          if (AR(32)='1') then
-            C <='1';
-          else
-            C <= '0';
-          end if;
-          if (signed(AR) < 0) then
-            N <= '1';
-          elsif (AR = 0) then
-            Z <= '1';
-          else
-            N <= '0';
-            Z <= '0';
-          end if;
-          
-	elsif (ALU = "0110") then
-          O <= '0';                     -- ???? checka senare om rätt
-          C <= '0';
-	  AR <= AR and ('0' & DATA_BUS);
-          if (signed(AR) < 0) then
-            N <= '1';
-          elsif (AR = 0) then
-            Z <= '1';
-          else
-            N <= '0';
-            Z <= '0';
-          end if;
-            
-	elsif (ALU = "0111") then
-          O <= '0';
-          C <='0';
-	  AR <= AR or ('0' & DATA_BUS);
-          if (signed(AR) < 0) then
-            N <= '1';
-          elsif (AR = 0) then
-            Z <= '1';
-          else
-            N <= '0';
-            Z <= '0';
-          end if;
-        end if; 
+      elsif (ALU = "0111") then
+        AR <= AR or ('0' & DATA_BUS);
+        
+      end if; 
     end if;
- end process;
+ end process;                           
 
   -- micro memory component connection
   U0 : uMem port map(uAddr=>uPC, uData=>uM);
@@ -314,12 +271,14 @@ begin
 
 
   -- LC components
-
-  LC_REG <= (LC_REG - 1) when (LC ="01") else
-            (DATA_BUS(7 downto 0)) when (LC ="10") else
-            uAddr when (LC = "11") else LC_REG;
-  L <= '1' when (LC_REG = 0 ) else '0';
-  
+     
+  -- ALU Flags
+     AR_TEMP <= AR(31);
+     Z <= '1' when (AR = 0) else '0';
+     N <= '1' when (signed(AR)<0) else '0';
+     C <= '1' when (AR(32) = '1')  else '0';
+     O <= '1' when ((AR(31)/=AR_TEMP) and (AR(31)/= DATA_BUS(31))) else '0';
+     L <= '1' when (LC_REG = 0) else '0';
   
   -- micro memory signal assignments
   
