@@ -72,14 +72,14 @@ architecture Behavioral of proj is
   constant p_mem_c : p_mem_t :=
     (x"00000003",                         --load 10 in gr0
      x"70000004",                         -- subtract 4 from gr0
-     x"80000005",                         --add 3 to gr1
+     x"90000005",                         --add 3 to gr1
      x"00000004",
-     x"00000004",
-     x"00000007",
-     x"00000004",
-     x"30000006",
+     x"00000005",
+     x"00000009",
      x"00000000",
      x"00000000",
+     x"00000000",
+     x"01000003",
      x"00000000",
      x"00000000",
      x"00000000",
@@ -277,7 +277,7 @@ begin
      Z <= '1' when (AR = 0) else '0';
      N <= '1' when (signed(AR)<0) else '0';
      C <= '1' when (AR(32) = '1')  else '0';
-     O <= '1' when ((AR(31)/=AR_TEMP) and (AR(31)/= DATA_BUS(31))) else '0';
+     O <= '1' when ((AR(31)/=AR_TEMP) and (AR(31)= DATA_BUS(31))) else '0';
      L <= '1' when (LC_REG = 0) else '0';
   
   -- micro memory signal assignments
