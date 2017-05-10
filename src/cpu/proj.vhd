@@ -23,6 +23,7 @@ architecture Behavioral of proj is
      --    pData : out unsigned(31 downto 0));
  -- end component;
   
+
   
   -- K1 memory component
   component K1
@@ -30,6 +31,14 @@ architecture Behavioral of proj is
          K1_adress: out unsigned(7 downto 0));
   end component;
 
+   -- K1 memory component
+  component K2
+    port(modd: in unsigned(3 downto 0);
+         K2_adress: out unsigned(7 downto 0));
+  end component;
+
+  --K2 memory component
+  signal K2_reg : unsigned(7 downto 0); --K2 memory output
   -- K1 memory component
   signal K1_reg : unsigned(7 downto 0);  -- K1 memory output
   -- micro memory signals
@@ -62,7 +71,7 @@ architecture Behavioral of proj is
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
   signal AR_TEMP : std_logic :='0';  -- temporary value for MSB in AR
- 
+  signal ADR_MOD : unsigned(3 downto 0);  -- Adress mod part of PM
 
 
 
@@ -71,16 +80,16 @@ architecture Behavioral of proj is
   -----------------------------------------------------------------------------
   type p_mem_t is array (0 to 500) of unsigned(31 downto 0);
   constant p_mem_c : p_mem_t :=
-    (x"00000003",                         --load 10 in gr0
-     x"70000004",                         -- subtract 4 from gr0
-     x"90000005",                         --add 3 to gr1
+    (x"00200003",                         --load 10 in gr0
+     x"00000009",                         -- subtract 4 from gr0
+     x"10000000",                         --add 3 to gr1
      x"00000004",
-     x"00000005",
-     x"00000009",
+     x"00000007",
      x"00000000",
      x"00000000",
      x"00000000",
-     x"01000003",
+     x"00000000",
+     x"00000000",
      x"00000000",
      x"00000000",
      x"00000000",
@@ -122,7 +131,9 @@ begin
       elsif (SEQ = "0000") then
         uPC <= uPC + 1;
       elsif (SEQ="0001") then
-        uPC <= K1_reg;                      
+        uPC <= K1_reg;
+      elsif (SEQ = "0010") then
+        uPC <= K2_reg;
       elsif (SEQ = "1000" and Z='1') then
         uPC <= uAddr;
       elsif (SEQ = "1001" and N='1') then
@@ -265,8 +276,9 @@ begin
   -- micro memory component connection
   U0 : uMem port map(uAddr=>uPC, uData=>uM);
 
-  -- KEYBOARD memory component connection
- -- 
+  -- K2 memory component connection
+  U1 : K2 port map (modd => ADR_MOD, K2_adress => K2_reg);
+ 
 
   -- K1 memory component connection
   U2 : K1 port map(operand => OP, K1_adress => K1_reg);
@@ -297,6 +309,7 @@ begin
   GRx <= IR(27 downto 24);
   OP <= IR(31 downto 28);
   PM_ADR <= IR(15 downto 0);
+  ADR_MOD <= IR(23 downto 20);   
   -- data bus assignment
   DATA_BUS <= IR when (TB = "001") else
     PM when (TB = "010") else
