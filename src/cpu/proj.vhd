@@ -62,6 +62,7 @@ architecture Behavioral of proj is
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
   signal AR_TEMP : std_logic :='0';  -- temporary value for MSB in AR
+ 
 
 
 
@@ -234,9 +235,10 @@ begin
 
  -- ALU  
  process(clk)
+   
  begin
     if rising_edge(clk) then
-
+      AR_TEMP <= AR(31);
       if (rst ='1' or ALU = "0011") then
         AR <= (others => '0');
       elsif (ALU= "0001") then
@@ -273,7 +275,7 @@ begin
   -- LC components
      
   -- ALU Flags
-     AR_TEMP <= AR(31);
+    -- AR_TEMP <= AR(31);
      Z <= '1' when (AR = 0) else '0';
      N <= '1' when (signed(AR)<0) else '0';
      C <= '1' when (AR(32) = '1')  else '0';
