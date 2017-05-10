@@ -1,8 +1,0 @@
-Release 12.4 Drc M.81d (lin64)
-Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
-
-Thu May 11 00:58:52 2017
-
-drc -z design.ncd design.pcf
-
-DRC detected 0 errors and 0 warnings.

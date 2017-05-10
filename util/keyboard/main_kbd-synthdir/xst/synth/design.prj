@@ -1,3 +1,0 @@
-vhdl work "../../../main_kbd.vhd"
-vhdl work "../../../KBD_ENC.vhd"
-vhdl work "../../../sevensegment.vhd"
