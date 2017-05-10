@@ -1,0 +1,7 @@
+INFILE=/edu/emiha868/Desktop/test/main_kbd-synthdir/layoutdefault/design.ncd
+OUTFILE=/edu/emiha868/Desktop/test/main_kbd-synthdir/layoutdefault/design.bit
+FAMILY=Spartan6
+PART=xc6slx16-3csg324
+WORKINGDIR=/edu/emiha868/Desktop/test/main_kbd-synthdir/layoutdefault
+LICENSE=ISE
+USER_INFO=1777494980_210567422_043

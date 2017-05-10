@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="HDLCompiler" num="439" delta="new" >"/edu/emiha868/Desktop/test/main_kbd-synthdir/xst/synth/../../../main_kbd.vhd" Line 22: Formal port <arg fmt="%s" index="1">data</arg> of mode <arg fmt="%s" index="2">in</arg> cannot be associated with actual port <arg fmt="%s" index="3">data</arg> of mode <arg fmt="%s" index="4">out</arg>
+</msg>
+
+<msg type="info" file="Xst" num="3010" delta="new" >&quot;<arg fmt="%s" index="1">/edu/emiha868/Desktop/test/main_kbd.vhd</arg>&quot; line <arg fmt="%d" index="2">42</arg>: Output port &lt;<arg fmt="%s" index="3">we</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U0</arg>&gt; is unconnected or connected to loadless signal.
+</msg>
+
+<msg type="warning" file="Xst" num="647" delta="new" >Input &lt;<arg fmt="%s" index="1">rst</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+</msg>
+
+<msg type="info" file="Xst" num="3048" delta="new" >The small RAM &lt;<arg fmt="%s" index="1">Mram_counter[1]_GND_6_o_wide_mux_20_OUT</arg>&gt; will be implemented on LUTs in order to maximize performance and save block RAM resources. If you want to force its implementation on block, use option/constraint ram_style.
+</msg>
+
+<msg type="warning" file="Xst" num="2677" delta="new" >Node &lt;<arg fmt="%s" index="1">PS2Data_sr_0</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">KBD_ENC</arg>&gt;.
+</msg>
+
+<msg type="info" file="Xst" num="2169" delta="new" >HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+</msg>
+
+</messages>
+
