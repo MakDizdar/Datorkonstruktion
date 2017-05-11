@@ -14,7 +14,8 @@ entity VGA_MOTOR is
 	 vgaGreen	        : out std_logic;
 	 vgaBlue		: out std_logic;
 	 Hsync		        : out std_logic;
-	 Vsync		        : out std_logic);
+	 Vsync		        : out std_logic;
+         blank                  : out std_logic);                    -- blanking signal
 end VGA_MOTOR;
 
 
@@ -32,7 +33,6 @@ architecture Behavioral of VGA_MOTOR is
   signal 	tilePixel       : std_logic_vector(2 downto 0);	-- Tile pixel data
   signal	tileAddr	: unsigned(7 downto 0);	-- Tile address
 
-  signal        blank           : std_logic;                    -- blanking signal
 	
 
   -- Tile memory type

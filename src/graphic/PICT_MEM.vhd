@@ -8,6 +8,7 @@ use IEEE.NUMERIC_STD.ALL;               -- IEEE library for the unsigned type
 -- entity
 entity PICT_MEM is
   port ( clk		: in std_logic;
+	 blank_p        : in std_logic;
          -- port 1;
          --addr1		: in unsigned(10 downto 0);
          -- port 2
