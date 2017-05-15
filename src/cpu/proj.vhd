@@ -76,6 +76,7 @@ architecture Behavioral of proj is
   signal ADR_MOD : unsigned(3 downto 0);  -- Adress mod part of PM
   --signal index : unsigned(15 downto 0) := x"0000";  -- index for pict_mem
   signal indexbuffer : unsigned(15 downto 0) := "1111111111111111";  -- index buffer
+  signal stack : unsigned(31 downto 0);  -- Where we save PC during TRA
 
   -----------------------------------------------------------------------------
   -- PRIMARY MEMMORY
@@ -237,6 +238,8 @@ begin
 	   GRx2 <= DATA_BUS;
         elsif (GRx = 3) then
     	   GRx3 <= DATA_BUS;
+        elsif (GRx = 4) then
+          stack <= DATA_BUS;
 	end if;
       end if;
     end if;
@@ -344,6 +347,7 @@ begin
     GRx1 when (TB ="110" and GRx = 1) else
     GRx2 when (TB ="110" and GRx = 2) else
     GRx3 when (TB ="110" and GRx = 3) else
+    stack when (TB ="110" and GRx =4) else
     (others => '0');
 
 end Behavioral;
