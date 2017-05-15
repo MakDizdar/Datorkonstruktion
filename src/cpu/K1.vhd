@@ -22,11 +22,11 @@ constant K1_mem_c : K1_mem_t :=
    x"11",                               --:5 AND
    x"15",                               --:6 BRA
    x"17",                               --:7 CMP
-   x"1A",                               --:8 BNE
+   x"1A",                               --:8 BEQ
    x"1E",                               --:9 BGE
    x"24",                               --:A MULU      
    x"30",                               --:B TRA
-   x"00",
+   x"3C",                               --:C BNE
    x"00",
    x"00",
    x"00");
