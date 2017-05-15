@@ -85,17 +85,17 @@ architecture Behavioral of proj is
     (x"00200000",                       -- load 2 till GR0
      x"00000002",                       
      x"20000019",                       -- store Gr0 i $1B
-     x"00200000",                       -- load 0 till gr0
+     x"00200000",                       -- load 3000 till gr0
      x"00000BB8",
-     x"B000000C",                       -- TRA
-     x"30200000",                       -- add 1 till gr0
+     x"40200000",                      
+     x"00000001",                       -- 1 till gr0
+     x"B000000C",
+     x"70200000",                       -- CMP gr0 och 1
      x"00000001",
-     x"70200000",                       -- CMP gr0 och 3000
-     x"00000000",
      x"9000000B",                       -- BGE hoppa till $05
      x"00000005",
      x"00000019",
-     x"00000000",
+     x"10000000",
      x"00000000",
      x"00000000",
      x"00000000",
