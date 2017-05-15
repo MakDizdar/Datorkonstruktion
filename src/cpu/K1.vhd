@@ -25,9 +25,9 @@ constant K1_mem_c : K1_mem_t :=
    x"1A",                               --:8 BEQ
    x"1E",                               --:9 BGE
    x"24",                               --:A MULU      
-   x"30",                               --:B TRA
-   x"3C",                               --:C BNE
-   x"00",
+   x"33",                               --:B TRA
+   x"3D",                               --:C BNE
+   x"40",                               --:D BL
    x"00",
    x"00");
 
