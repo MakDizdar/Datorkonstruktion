@@ -153,9 +153,13 @@ begin
   begin
     if rising_edge(clk) then
       data_out2 <= pictMem(to_integer(addr2));
+      --if (blank_p = 1) then
+        --pictMem(to_integer(index)) <= tile; 
+      --end if;
     end if;
   end process;
 
 
+             
 end Behavioral;
 

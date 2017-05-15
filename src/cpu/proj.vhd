@@ -5,7 +5,9 @@ use IEEE.NUMERIC_STD.ALL;
 --CPU interface
 entity proj is
   port(clk: in std_logic;
-	     rst: in std_logic);
+       rst: in std_logic;
+       tile: out unsigned(3 downto 0);
+       index: out unsigned(15 downto 0));
 end proj ;
 
 architecture Behavioral of proj is
@@ -66,15 +68,15 @@ architecture Behavioral of proj is
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0); 	
-  signal LC_REG : unsigned(7 downto 0):= x"00"; -- register holding loop value
+  signal LC_REG : unsigned(15 downto 0):= x"0000"; -- register holding loop value
   signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
   signal PM_ADR : unsigned(15 downto 0);  -- adress part of PM
   signal AR_TEMP : std_logic :='0';  -- temporary value for MSB in AR
   signal ADR_MOD : unsigned(3 downto 0);  -- Adress mod part of PM
   signal tile : unsigned(3 downto 0); -- tile 
-
-
+  signal index : unsigned(15 downto 0) := x"0000";  -- index for pict_mem
+  signal tra_flag : <type>
 
   -----------------------------------------------------------------------------
   -- PRIMARY MEMMORY
@@ -323,16 +325,21 @@ begin
         ASR <= (others => '0');
       elsif (FB = "111") then
         ASR <= x"0000" & DATA_BUS(15 downto 0);
-	--if(ASR=traverse)
+	--if(PM(4 MSB)= B)
 	--sätt flaggan
-	--elsif(asr= slutvärde)
+	--elsif(index= slutvärde)
 	--nollställ index
         --flagga 0
 	--end if;
-     --elsif(flagga = '1') then
-     --index <= index +1;
-	
-      end if;
+     elsif(tra_flag = '1') then
+       index <= index +1;
+       tile <= PM(3 downto 0);
+       
+       if (index = 1) then
+         index <= 0;
+       end if;
+       
+     end if;
 	
     end if;
   end process;
@@ -382,7 +389,7 @@ begin
        elsif (LC = "01") then
          LC_REG <= LC_REG - 1;
        elsif (LC = "10") then
-         LC_REG <= DATA_BUS(7 downto 0);
+         LC_REG <= DATA_BUS(15 downto 0);
        elsif (LC ="11") then
          LC_REG <= uAddr;
        end if;
@@ -429,7 +436,10 @@ begin
   U2 : K1 port map(operand => OP, K1_adress => K1_reg);
 
 
-  -- LC components
+  -- Pict_mem flag
+  tra_flag <= '1' when (PM(31 downto 28)= x"B") else 
+             '0' when (index = 1);
+             
      
   -- ALU Flags
     -- AR_TEMP <= AR(31);
@@ -450,7 +460,7 @@ begin
   ALU <= uM(24 downto 21);       
   	
   -- primary memory signal assignment
-  tile <= PM(3 downto 0);
+ 
   PM <= p_mem(to_integer(ASR));
   GRx <= IR(27 downto 24);
   OP <= IR(31 downto 28);
