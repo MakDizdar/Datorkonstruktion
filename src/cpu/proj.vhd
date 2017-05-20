@@ -6,6 +6,8 @@ use IEEE.NUMERIC_STD.ALL;
 entity proj is
   port(clk: in std_logic;
        rst: in std_logic;
+       key: in unsigned(7 downto 0);
+       beep_en:out std_logic;
        tile: out unsigned(3 downto 0);
        index: out unsigned(15 downto 0));
 end proj ;
@@ -67,7 +69,8 @@ architecture Behavioral of proj is
   signal GRx0 : unsigned(31 downto 0); 		
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
-  signal GRx3 : unsigned(31 downto 0); 	
+  signal GRx3 : unsigned(31 downto 0);
+  signal GRx5 : unsigned(31 downto 0); 	
   signal LC_REG : unsigned(15 downto 0):= x"0000"; -- register holding loop value
   signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
@@ -344,7 +347,8 @@ begin
   -- GRx: general register
   process(clk)
   begin
-    if rising_edge(clk) then 
+    if rising_edge(clk) then
+      GRx5 <= x"000000" & key;
       if (rst ='1') then
 	GRx0 <= (others => '0');
 	GRx1 <= (others => '0');
@@ -415,6 +419,10 @@ begin
         if (indexbuffer = 4799) then
           indexbuffer <= (others => '0');
         end if;
+      elsif (ALU = "1110") then
+        beep_en <= '1';
+      elsif (ALU = "1111") then
+        beep_en <= '0';
         
       end if; 
     end if;
@@ -469,6 +477,7 @@ begin
     GRx2 when (TB ="110" and GRx = 2) else
     GRx3 when (TB ="110" and GRx = 3) else
     stack when (TB ="110" and GRx =4) else
+    GRx5 when (TB = "110" and GRx =5) else
     (others => '0');
 
 end Behavioral;

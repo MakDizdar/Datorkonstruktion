@@ -28,7 +28,7 @@ constant K1_mem_c : K1_mem_t :=
    x"30",                               --:B TRA
    x"3D",                               --:C BNE
    x"40",                               --:D BL
-   x"00",                               --:E TRA old
+   x"45",                               --:E BEEP
    x"00");
 
 signal K1_sig : K1_mem_t := K1_mem_c;

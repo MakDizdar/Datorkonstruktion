@@ -35,6 +35,8 @@ end component;
 component proj is
   port(clk      : in std_logic;
        rst      : in std_logic;
+       key      : in unsigned(7 downto 0);
+       beep     : out std_logic;
        tile     : out unsigned(3 downto 0);
        index    : out unsigned(15 downto 0));
 end component;
