@@ -14,7 +14,8 @@ entity VGA_MOTOR is
 	 vgaGreen	        : out std_logic;
 	 vgaBlue		: out std_logic;
 	 Hsync		        : out std_logic;
-	 Vsync		        : out std_logic
+	 Vsync		        : out std_logic;
+         blank_out              : out std_logic
 	);
 end VGA_MOTOR;
 
@@ -36,7 +37,8 @@ architecture Behavioral of VGA_MOTOR is
 
 	
 
-  -- Tile memory type
+  
+  -- Tile memory typ
   type ram_t is array (0 to 95) of std_logic_vector(2 downto 0);
 
 -- Tile memory
@@ -74,6 +76,8 @@ architecture Behavioral of VGA_MOTOR is
 		  
 begin
 
+
+     blank_out <= blank;
   -- Clock divisor
   -- Divide system clock (100 MHz) by 4
   process(clk)

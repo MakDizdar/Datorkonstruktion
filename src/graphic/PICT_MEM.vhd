@@ -8,10 +8,9 @@ use IEEE.NUMERIC_STD.ALL;               -- IEEE library for the unsigned type
 -- entity
 entity PICT_MEM is
   port ( clk		: in std_logic;
-	 --blank_p        : in std_logic;
-         -- port 1;
-         --addr1		: in unsigned(10 downto 0);
-         -- port 2
+	 blank        : in std_logic;
+         tile           : in unsigned(3 downto 0);
+         index          : in unsigned(15 downto 0);
          data_out2	: out std_logic_vector(3 downto 0);
          addr2		: in unsigned(12 downto 0));
 
@@ -149,10 +148,18 @@ x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",x"0",
 
 begin
 
+
+
   process(clk)
   begin
     if rising_edge(clk) then
       data_out2 <= pictMem(to_integer(addr2));
+      if (blank = '1') then
+      	pictMem(to_integer(index)) <= std_logic_vector(tile);
+	end if;
+
+ 
+       
     end if;
   end process;
 

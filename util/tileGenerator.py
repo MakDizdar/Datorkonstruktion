@@ -13,12 +13,12 @@ def emptyBoard():
 def createBoard():
     board = emptyBoard()
     for x in range(80):
-        board[0][x] = "x\"00000000\","
-        board[59][x]= "x\"00000000\","
+        board[0][x] = "x\"00000005\","
+        board[59][x]= "x\"00000005\","
     
     for y in range(60):
-        board[y][0] = "x\"00000000\","
-        board[y][79]= "x\"00000000\","
+        board[y][0] = "x\"00000005\","
+        board[y][79]= "x\"00000005\","
     
     for y in range(30,35):
         board[y][4] = "x\"00000002\","
