@@ -154,9 +154,9 @@ begin
   begin
     if rising_edge(clk) then
       data_out2 <= pictMem(to_integer(addr2));
-      if (blank = '1') then
+      
       	pictMem(to_integer(index)) <= std_logic_vector(tile);
-	end if;
+	
 
  
        

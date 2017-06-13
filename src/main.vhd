@@ -35,8 +35,8 @@ end component;
 component proj is
   port(clk      : in std_logic;
        rst      : in std_logic;
-       key      : in unsigned(7 downto 0);
-       beep     : out std_logic;
+       --key      : in unsigned(7 downto 0);
+       beep_en     : out std_logic;
        tile     : out unsigned(3 downto 0);
        index    : out unsigned(15 downto 0));
 end component;
@@ -44,7 +44,7 @@ end component;
 component sevensegment
   port(clk      : in STD_LOGIC;
        rst      : in STD_LOGIC;
-       data     : out STD_LOGIC_VECTOR(7 downto 0);
+       data     : in STD_LOGIC_VECTOR(7 downto 0);
        seg      : out STD_LOGIC_VECTOR(7 downto 0);
        an       : out STD_LOGIC_VECTOR(3 downto 0));
 end component;
@@ -60,7 +60,9 @@ end component;
 
 component beep
   port(clk      : in std_logic;
-       bang     : out std_logic);
+       bang     : out std_logic;
+       beep_en: in std_logic
+       );
 end component;
 
 
@@ -70,15 +72,15 @@ signal tile_s : unsigned(3 downto 0);
 signal index_s : unsigned(15 downto 0);
 signal data_s : std_logic_vector(7 downto 0);
 signal we_s  : std_logic;
+signal beep_en_s : std_logic;
 
 begin  -- Behavioral of main is
 
-U1: proj port map(clk=>clk, rst=>rst, tile=>tile_s, index=>index_s);
+U1: proj port map(clk=>clk, rst=>rst, tile=>tile_s, index=>index_s, beep_en=>beep_en_s);
 U2: graphic port map(clk=>clk,rst=>rst,Hsync=>Hsync,Vsync=>Vsync,vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, tile=>tile_s, index=>index_s); 
 U3: KBD_ENC port map(clk=>clk, rst=>rst, PS2KeyboardCLK=>PS2KeyboardCLK, PS2KeyboardData=>PS2KeyboardData, data=>data_s, we=>we_s);
 U4: sevensegment port map(clk=>clk, rst=>rst, an=>an, seg=>seg, data=>data_s);
-U5: beep port map(clk=>clk, bang=>bang);
-
+U5: beep port map(clk=>clk, bang=>bang, beep_en=>beep_en_s);
 --U3: main_kbd port map(clk=>clk, rst=>rst, PS2KeyboardCLK=>PS2KeyboardCLK, PS2KeyboardData=>PS2KeyboardCLK, an=>an, seg=>seg);
 --component main_kbd is
 --  port(clk                     : in STD_LOGIC;
