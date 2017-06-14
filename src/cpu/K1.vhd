@@ -19,7 +19,8 @@ constant K1_mem_c : K1_mem_t :=
    x"07",                               --:2 STORE
    x"09",                               --:3 ADD
    x"0D",                               --:4 SUB
-   x"11",                               --:5 AND
+   x"33",                               --:5 BRA_PLUS
+  -- x"11",                               --:5 AND
    x"15",                               --:6 BRA
    x"17",                               --:7 CMP
    x"1A",                               --:8 BEQ
@@ -29,7 +30,8 @@ constant K1_mem_c : K1_mem_t :=
    x"3D",                               --:C BNE
    x"40",                               --:D BL
    x"45",                               --:E BEEP
-   x"00");
+   x"37"                                --:F BRA_MINUS
+   );
 
 signal K1_sig : K1_mem_t := K1_mem_c;
 
