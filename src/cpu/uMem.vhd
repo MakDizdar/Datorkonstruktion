@@ -12,7 +12,7 @@ end uMem;
 architecture Behavioral of uMem is
 
 -- micro Memory
-type u_mem_t is array (0 to 80) of unsigned(24 downto 0);
+type u_mem_t is array (0 to 90) of unsigned(24 downto 0);
 constant u_mem_c : u_mem_t :=
    --ALU__TB__FB_PC_LC_SEQ__uAddr
   (b"0000_011_111_0_00_0000_00000000",   --ASR := PC
@@ -89,9 +89,10 @@ constant u_mem_c : u_mem_t :=
    b"0000_000_000_0_01_0000_01000110",
    b"1111_000_000_0_00_0000_00000000",
    b"0000_000_000_0_00_0011_00000000",
-   b"0000_000_000_0_00_0000_00000000",
-   b"0000_000_000_0_00_0000_00000000",
-   b"0000_000_000_0_00_0000_00000000",
+   b"0000_001_111_0_00_0000_00000000",  --Inception
+   b"0000_010_111_0_00_0000_00000000",
+   b"0000_010_111_0_00_0001_00000000",
+   b"0000_000_000_0_00_0011_00000000",
    others =>(others => '0'));
 
 signal u_mem : u_mem_t := u_mem_c;
