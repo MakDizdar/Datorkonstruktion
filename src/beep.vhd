@@ -34,11 +34,10 @@ end process;
 
 
 process(clk_1kHz) begin
-  if rising_edge(beep_en) then
-    beep_timer_en <= not(beep_timer_en);
+    if rising_edge(clk_1khz)then
+     if rising_edge(beep_en) then
+    beep_timer_en <= '1';
   end if;
-  
-  if rising_edge(clk_1khz)then
    if beep_timer_en = '1' then
     if (beep_counter = 600) then
       beep_counter <= 0;

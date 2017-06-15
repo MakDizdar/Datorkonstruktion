@@ -28,12 +28,12 @@
 --The an signal is a 4-bit vector which stands for anode. The an signal
 --decides what digit will be enabled.You enable with a logic zero,
 --the left most 7seg is enabled by letting anode be "0111".
---Enabling all four is done with an <= "0000". Keep in mind they
+--Enabling all four is done with an <= "0000". Keep in mind
 --that they all share the same segments that's why multiplexing
 --is needed.
 --See the UCF-file for PIN names.
 --
---The seg signal for the nexys3 spartan6 is a 8-bit vector where logic zeroes
+--The seg signal for the nexys3 spartan6 is an 8-bit vector where logic zeroes
 --enables the segments. The most significant bit stand for decimal point. In
 --that following order A stands for segment A and so on where the least
 --significant bit stands for segment G. See the UCF-file for PIN details.
@@ -46,7 +46,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity sevensegment is
   PORT(clk      : in STD_LOGIC;
        rst      : in STD_LOGIC;
-       data     : in STD_LOGIC_VECTOR(7 downto 0);
+       data     : in unsigned(15 downto 0);
        seg      : out STD_LOGIC_VECTOR(7 downto 0);
        an       : out STD_LOGIC_VECTOR(3 downto 0));
 end sevensegment;
@@ -65,19 +65,25 @@ begin  -- Behavioral
 seg <= ('1' & segments);                --logic 1 to disable decimal point
 
 
-with data select
+with data(3 downto 0) select
   key <=
-        "0111000" when x"00",   --Space pressed, F out
-        "0000001" when x"01",   --A pressed, 0 out
-        "1001111" when x"02",   -- B pressed, 1 out
-        "0010010" when x"03",   -- C pressed, 2 out
-        "0000110" when x"04",   -- D, 3 out
-        "1001100" when x"05",   -- E, 4 out
-        "0100100" when x"06",   -- F, 5 out
-        "0100000" when x"07",   -- G, 6 out
-        "0001111" when x"08",   -- H, 7 out
-        "0000000" when x"09",   -- I, 8 out
-        "0000100" when x"0A",    -- J, 9 out                       
+        "0111000" when x"0",   -- Space pressed, F out
+        "0000001" when x"1",   -- A pressed, 0 out
+        "1001111" when x"2",   -- B pressed, 1 out
+        "0010010" when x"3",   -- C pressed, 2 out
+        "0000110" when x"4",   -- D, 3 out
+        "1001100" when x"5",   -- E, 4 out
+        "0100100" when x"6",   -- F, 5 out
+        "0100000" when x"7",   -- G, 6 out
+        "0001111" when x"8",   -- H, 7 out
+        "0000000" when x"9",   -- I, 8 out
+
+        "0000100" when x"A",   -- J, 9 out
+        "0000000" when x"B",
+        "0000000" when x"C",
+        "0000000" when x"D",
+        "0000000" when x"E",
+        "0000000" when x"F",
         "0111000" when others;
   
        

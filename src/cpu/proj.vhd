@@ -6,10 +6,11 @@ use IEEE.NUMERIC_STD.ALL;
 entity proj is
   port(clk: in std_logic;
        rst: in std_logic;
-       --key: in unsigned(7 downto 0);
+       key: in unsigned(7 downto 0);
        beep_en:out std_logic;
        tile: out unsigned(3 downto 0);
-       index: out unsigned(15 downto 0));
+       index: out unsigned(15 downto 0);
+       score : out unsigned(15 downto 0));
 end proj ;
 
 architecture Behavioral of proj is
@@ -66,11 +67,15 @@ architecture Behavioral of proj is
   signal AR : unsigned(32 downto 0) := ('0' & x"00000000"); -- stores alu operated values
   signal GRx : unsigned(3 downto 0) ; -- grx part in pm
   signal OP : unsigned(3 downto 0); -- Operation part in pm
+
   signal GRx0 : unsigned(31 downto 0); 		
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0);
-  signal GRx5 : unsigned(31 downto 0); 	
+  signal GRx4 : unsigned(31 downto 0);  --Holding value shown on sevensegments
+  signal GRx5 : unsigned(31 downto 0);  --Holding the value of key pressed on keyboard
+  
+
   signal LC_REG : unsigned(15 downto 0):= x"0000"; -- register holding loop value
   signal L , N, Z, O, C : std_logic := '0';    -- flags
   signal HALT : std_logic := '1';       -- flag for halting PC
@@ -79,7 +84,7 @@ architecture Behavioral of proj is
   signal ADR_MOD : unsigned(3 downto 0);  -- Adress mod part of PM
   --signal index : unsigned(15 downto 0) := x"0000";  -- index for pict_mem
   signal indexbuffer : unsigned(15 downto 0) := "1111111111111111";  -- index buffer
-  signal stack : unsigned(31 downto 0);  -- Where we save PC during TRA
+  
 
   -----------------------------------------------------------------------------
   -- PRIMARY MEMMORY
@@ -87,9 +92,9 @@ architecture Behavioral of proj is
   type p_mem_t is array (0 to 5000) of unsigned(31 downto 0);
   constant p_mem_c : p_mem_t :=
 
-  (x"E0000001",
-
-    x"02200000",       -- load FFFF till gr2   /YTTRE
+  (  x"E0000001",
+     
+     x"02200000",       -- load FFFF till gr2   /YTTRE
      x"000000FF",
      x"42200000",       -- sub gr2 med 1 /YTTRE 
      x"00000001",       --
@@ -108,16 +113,9 @@ architecture Behavioral of proj is
      x"90200000",                       --bge hoppa till $3 //yttre
      x"00000003",                       --  //yttre
 
-   x"E0000001",
-
-
-
-
-
-
-    
-
-    x"00200000",       -- load 4800 till gr0
+     x"E0000001",
+     
+     x"00200000",       -- load 4800 till gr0
      x"000012C0",
      x"40200000",  	-- SUB gr0                     /4800 loop
      x"00000001",       -- 1 till gr0                  /4800 loop
@@ -131,8 +129,6 @@ architecture Behavioral of proj is
      x"00000014",       --                     /4800 LOOP
      x"00000020",	-- tile i minne till TRA? / ($C)
      x"10000000",                       -- BRA $0
- 
- 
 x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005", 
  
 x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005", 
@@ -265,19 +261,7 @@ x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"000000
 -------------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-  
-begin
-
-  
+begin  
   -- mPC : micro Program Counter
   process(clk)
   begin
@@ -367,12 +351,15 @@ begin
   process(clk)
   begin
     if rising_edge(clk) then
-      --GRx5 <= x"000000" & key;
+      GRx5 <= x"000000" & key;
       if (rst ='1') then
 	GRx0 <= (others => '0');
 	GRx1 <= (others => '0');
 	GRx2 <= (others => '0');
 	GRx3 <= (others => '0');
+        GRX4 <= (others => '0');
+        GRX5 <= (others => '0');
+        
       elsif (FB = "110") then
 	if (GRx = 0) then
 	   GRx0 <= DATA_BUS;
@@ -383,7 +370,7 @@ begin
         elsif (GRx = 3) then
     	   GRx3 <= DATA_BUS;
         elsif (GRx = 4) then
-          stack <= DATA_BUS;
+           GRx4 <= DATA_BUS;
 	end if;
       end if;
     end if;
@@ -420,10 +407,8 @@ begin
         
       elsif (ALU ="0100") then
         AR <= AR + ('0' & DATA_BUS);
-     
-     
-        
-      Elsif (ALU ="0101") then
+  
+      elsif (ALU ="0101") then
         AR <= AR - ('0' & DATA_BUS);
        
       elsif (ALU = "0110") then
@@ -488,15 +473,16 @@ begin
   ADR_MOD <= IR(23 downto 20);   
   -- data bus assignment
   DATA_BUS <= IR when (TB = "001") else
-    PM when (TB = "010") else
-    PC when (TB = "011") else
-    AR(31 downto 0) when (TB = "100") else
-    GRx0 when (TB ="110" and GRx = 0) else
-    GRx1 when (TB ="110" and GRx = 1) else
-    GRx2 when (TB ="110" and GRx = 2) else
-    GRx3 when (TB ="110" and GRx = 3) else
-    stack when (TB ="110" and GRx =4) else
-    GRx5 when (TB = "110" and GRx =5) else
-    (others => '0');
+  PM when (TB = "010") else
+  PC when (TB = "011") else
+  AR(31 downto 0) when (TB = "100") else
+  GRx0 when (TB ="110" and GRx = 0) else
+  GRx1 when (TB ="110" and GRx = 1) else
+  GRx2 when (TB ="110" and GRx = 2) else
+  GRx3 when (TB ="110" and GRx = 3) else
+  GRx5 when (TB = "110" and GRx =5) else
+  (others => '0');
 
+  -- Output for Peripheral devices
+  score <= GRx4(15 downto 0);
 end Behavioral;
