@@ -7,6 +7,7 @@ entity proj is
   port(clk: in std_logic;
        rst: in std_logic;
        key: in unsigned(7 downto 0);
+       random : in unsigned(12 downto 0);
        beep_en:out std_logic;
        tile: out unsigned(3 downto 0);
        index: out unsigned(15 downto 0);
@@ -72,8 +73,10 @@ architecture Behavioral of proj is
   signal GRx1 : unsigned(31 downto 0); 	
   signal GRx2 : unsigned(31 downto 0); 	
   signal GRx3 : unsigned(31 downto 0);
+
   signal GRx4 : unsigned(31 downto 0);  --Holding value shown on sevensegments
   signal GRx5 : unsigned(31 downto 0);  --Holding the value of key pressed on keyboard
+  signal GRx6 : unsigned(31 downto 0);  -- Holding /dev/urandom value
   
 
   signal LC_REG : unsigned(15 downto 0):= x"0000"; -- register holding loop value
@@ -93,42 +96,12 @@ architecture Behavioral of proj is
   constant p_mem_c : p_mem_t :=
 
   (  x"E0000001",
-     
-     x"02200000",       -- load FFFF till gr2   /YTTRE
-     x"000000FF",
-     x"42200000",       -- sub gr2 med 1 /YTTRE 
-     x"00000001",       --
-     
-     x"00200000",       -- load 4800 till gr0
-     x"0000FFFF",
-     x"40200000",  	-- SUB gr0                     /4800 loop
-     x"00000001",       -- 1 till gr0                  /4800 loop
-     x"70200000",       -- CMP gr0 och 1      /LOOP
-     x"00000001",       --                    /LOOP
-     x"90200000",       -- bge hoppa till $7  /LOOP
-     x"00000007",       --                    /LOOP
-
-     x"72200000",       -- CMP gr2 och 1
+     x"26000005",
+     x"04000005",
+     x"60000006",
+     x"10000000",
+     x"00000000",
      x"00000001",
-     x"90200000",                       --bge hoppa till $3 //yttre
-     x"00000003",                       --  //yttre
-
-     x"E0000001",
-     
-     x"00200000",       -- load 4800 till gr0
-     x"000012C0",
-     x"40200000",  	-- SUB gr0                     /4800 loop
-     x"00000001",       -- 1 till gr0                  /4800 loop
-     x"B000001E",	-- TRA, argument till var den börjar /4800 loop
-     x"0200001E",       -- load till gr 2 i $C        /ADDERA ($C)
-     x"32000004",       -- ADD 1 till gr2, lagrad i 3 /ADDERA ($C)
-     x"2200001E",       -- store gr2 i C              /ADDERA ($C)
-     x"70200000",       -- CMP gr0 och 1       /4800 LOOP
-     x"00000001",       --                     /4800 LOOP
-     x"9000001D",       -- bge hoppa till $16  /4800 LOOP
-     x"00000014",       --                     /4800 LOOP
-     x"00000020",	-- tile i minne till TRA? / ($C)
-     x"10000000",                       -- BRA $0
 x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005", 
  
 x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005", 
@@ -352,6 +325,7 @@ begin
   begin
     if rising_edge(clk) then
       GRx5 <= x"000000" & key;
+      GRx6 <= x"0000" &"000" & random;
       if (rst ='1') then
 	GRx0 <= (others => '0');
 	GRx1 <= (others => '0');
@@ -359,6 +333,7 @@ begin
 	GRx3 <= (others => '0');
         GRX4 <= (others => '0');
         GRX5 <= (others => '0');
+        GRx6 <= (others => '0');
         
       elsif (FB = "110") then
 	if (GRx = 0) then
@@ -371,6 +346,7 @@ begin
     	   GRx3 <= DATA_BUS;
         elsif (GRx = 4) then
            GRx4 <= DATA_BUS;
+    
 	end if;
       end if;
     end if;
@@ -480,7 +456,8 @@ begin
   GRx1 when (TB ="110" and GRx = 1) else
   GRx2 when (TB ="110" and GRx = 2) else
   GRx3 when (TB ="110" and GRx = 3) else
-  GRx5 when (TB = "110" and GRx =5) else
+  GRx5 when (TB = "110" and GRx = 5) else
+  GRx6 when (TB = "110" and GRx = 6) else
   (others => '0');
 
   -- Output for Peripheral devices

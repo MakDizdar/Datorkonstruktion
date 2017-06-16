@@ -4,6 +4,8 @@ use IEEE.NUMERIC_STD.ALL;
 entity main is
   port( clk	                        : in 	std_logic;      -- system clock
 	 rst                            : in 	std_logic;      -- reset
+         random                         : in    unsigned(12 downto 0);  --/dev/urandom
+
 	 Hsync	                        : out 	std_logic;      -- horizontal sync
 	 Vsync	                        : out 	std_logic;      -- Vertical sync
 	 vgaRed	                        : out 	std_logic;   	-- VGA red
@@ -29,13 +31,15 @@ component graphic is
        Vsync	              : out 	std_logic;      -- vertical sync
        vgaRed	              : out 	std_logic;   	-- VGA red
        vgaGreen               : out 	std_logic;     	-- VGA green
-       vgaBlue	              : out 	std_logic);     -- VGA blue 
+       vgaBlue	              : out 	std_logic);     -- VGA blue
+                                                        
 end component;
 
 component proj is
   port(clk      : in std_logic;
        rst      : in std_logic;
        key      : in unsigned(7 downto 0);
+       random   : in unsigned(12 downto 0);
        
        score    : out unsigned(15 downto 0);
        beep_en  : out std_logic;
@@ -57,7 +61,9 @@ component KBD_ENC
 	   PS2KeyboardCLK       : in std_logic;				-- PS2 clock
 	   PS2KeyboardData      : in std_logic;				-- PS2 data
 	   data		        : out std_logic_vector(7 downto 0);	-- tile data
-	   we			: out std_logic);	                -- write enable
+	   we			: out std_logic;
+           random               : out unsigned(12 downto 0)
+           );	                -- write enable
 end component;
 
 component beep
@@ -81,13 +87,15 @@ signal beep_en_s : std_logic;
 
 signal score_s : unsigned(15 downto 0);
 
+signal random_s : unsigned(12 downto 0);
+
 begin  -- Behavioral of main is
 
 key <= unsigned(data_s);
 
-U1: proj port map(clk=>clk, rst=>rst, tile=>tile_s, index=>index_s, beep_en=>beep_en_s, key=>key, score=>score_s);
+U1: proj port map(clk=>clk, rst=>rst, tile=>tile_s, index=>index_s, beep_en=>beep_en_s, key=>key, score=>score_s, random=>random_s);
 U2: graphic port map(clk=>clk,rst=>rst,Hsync=>Hsync,Vsync=>Vsync,vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, tile=>tile_s, index=>index_s); 
-U3: KBD_ENC port map(clk=>clk, rst=>rst, PS2KeyboardCLK=>PS2KeyboardCLK, PS2KeyboardData=>PS2KeyboardData, data=>data_s, we=>we_s);
+U3: KBD_ENC port map(clk=>clk, rst=>rst, PS2KeyboardCLK=>PS2KeyboardCLK, PS2KeyboardData=>PS2KeyboardData, data=>data_s, we=>we_s, random=>random_s);
 U4: sevensegment port map(clk=>clk, rst=>rst, an=>an, seg=>seg, data=>score_s);
 U5: beep port map(clk=>clk, bang=>bang, beep_en=>beep_en_s);
 --U3: main_kbd port map(clk=>clk, rst=>rst, PS2KeyboardCLK=>PS2KeyboardCLK, PS2KeyboardData=>PS2KeyboardCLK, an=>an, seg=>seg);

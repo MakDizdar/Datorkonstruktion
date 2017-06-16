@@ -59,34 +59,37 @@ signal counter : unsigned(1 downto 0) := "00";
 signal segments : std_logic_vector(6 downto 0):= "0000000";
 
 signal key : std_logic_vector(6 downto 0) := "0001111";  --The seg value for key pressed
+signal digit : unsigned(3 downto 0) := "1111";
+
 
 begin  -- Behavioral
 --Combinatorial processes
 seg <= ('1' & segments);                --logic 1 to disable decimal point
 
 
-with data(3 downto 0) select
-  key <=
-        "0111000" when x"0",   -- Space pressed, F out
-        "0000001" when x"1",   -- A pressed, 0 out
-        "1001111" when x"2",   -- B pressed, 1 out
-        "0010010" when x"3",   -- C pressed, 2 out
-        "0000110" when x"4",   -- D, 3 out
-        "1001100" when x"5",   -- E, 4 out
-        "0100100" when x"6",   -- F, 5 out
-        "0100000" when x"7",   -- G, 6 out
-        "0001111" when x"8",   -- H, 7 out
-        "0000000" when x"9",   -- I, 8 out
-
-        "0000100" when x"A",   -- J, 9 out
-        "0000000" when x"B",
-        "0000000" when x"C",
-        "0000000" when x"D",
-        "0000000" when x"E",
-        "0000000" when x"F",
+with digit select
+  key <= 
+        "0000001" when x"0",   -- A pressed, 0 out
+        "1001111" when x"1",   -- B pressed, 1 out
+        "0010010" when x"2",   -- C pressed, 2 out
+        "0000110" when x"3",   -- D, 3 out
+        "1001100" when x"4",   -- E, 4 out
+        "0100100" when x"5",   -- F, 5 out
+        "0100000" when x"6",   -- G, 6 out
+        "0001111" when x"7",   -- H, 7 out
+        "0000000" when x"8",   -- I, 8 out
+        "0000100" when x"9",   -- J, 9 out
+  
+        "0001000" when x"A",
+        "1100000" when x"b",
+        "0110001" when x"C",
+        "1000010" when x"d",
+        "0110000" when x"E",
+        "0111000" when x"F",
         "0111000" when others;
   
-       
+
+segments <= key;
 --Synchronized processes
 freq_divider:process(clk) begin         --Divides the 100 mhz sys_clk to 1000hz
   if rising_edge(clk) then
@@ -105,10 +108,10 @@ process(clk) begin
     counter <= counter + 1;
   end if;
   case counter is
-    when "00" => an <= "1110"; segments <= key;
-    when "01" => an <= "1101"; segments <= "0000011";
-    when "10" => an <= "1011"; segments <= "0000111";
-    when others => an <= "0111";segments <="0001111";
+    when "00" => an <= "1110";  digit <= data(3 downto 0); 
+    when "01" => an <= "1101";  digit  <= data(7 downto 4); 
+    when "10" => an <= "1011";  digit  <= data(11 downto 8); 
+    when others => an <= "0111"; digit <= data(15 downto 12); 
   end case;
  end if;
 end process;

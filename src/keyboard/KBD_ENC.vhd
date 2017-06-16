@@ -12,7 +12,8 @@ entity KBD_ENC is
          PS2KeyboardCLK	        : in std_logic; 		-- USB keyboard PS2 clock
          PS2KeyboardData	: in std_logic;			-- USB keyboard PS2 data
          data			: out std_logic_vector(7 downto 0);		-- tile data
-         we			: out std_logic);		-- write enable
+         we			: out std_logic;  --write enable
+         random                 : out unsigned(12 downto 0));  --random value 0-4799
 end KBD_ENC;
 
 -- architecture
@@ -37,6 +38,8 @@ architecture behavioral of KBD_ENC is
   type wr_type is (STANDBY, WRCHAR, WRCUR);			-- declare state types for write cycle
   signal WRstate : wr_type;					-- write cycle state
 
+  signal random_generator : unsigned(12 downto 0) := "0" & x"FFF";
+  
 begin
 
   -- Synchronize PS2-KBD signals
@@ -130,6 +133,7 @@ begin
        when IDLE =>
          if ((BC11 = '1') and (ScanCode /= "11110000")) then
            PS2state <= MAKE;
+           random <= random_generator;
          elsif ((BC11 = '1') and (ScanCode ="11110000")) then
            PS2state <= BREAK;
          else
@@ -210,6 +214,18 @@ begin
       end if;
     end if;
   end process;
+
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
+        if random_generator /= 4799 then
+           random_generator <= random_generator + 1;
+        else
+           random_generator <= "0" & x"000";
+        end if;
+    end if;
+  end process;
 	
 
   -- we will be enabled ('1') for two consecutive clock cycles during WRCHAR and WRCUR states
@@ -219,5 +235,6 @@ begin
 -- data output is set to be x"1F" (cursor tile index) during WRCUR state, otherwise set as scan code tile index
   data <= x"1F" when (WRstate =  WRCUR) else TileIndex;
 
+ 
   
 end behavioral;
