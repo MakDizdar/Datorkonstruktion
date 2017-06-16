@@ -96,63 +96,63 @@ architecture Behavioral of proj is
   constant p_mem_c : p_mem_t :=
 
   (   	--translate 
-    x"00000052",
+    x"00000056",
     x"30200000",
     x"00000001",
-    x"20000052",
-    x"01000053",
+    x"20000056",
+    x"01000057",
     x"A1200000",
     x"00000050",
-    x"31000052",
+    x"31000056",
+    x"31000002",
     x"31200000",
-    x"00000054",
+    x"00000058",
 
     --demo loop LÄGG/TA BORT
     x"00200000",  --load 1 till gr0			
     x"00000005",
-    x"02000055",   --load F till gr2  	  
-    x"20300055",	--store 1 i det som Fs pekare pekar på (inception)
+    x"02000059",   --load F till gr2  	  
+    x"20300059",	--store 1 i det som Fs pekare pekar på (inception)
     x"32000002",                        --loop
-    x"72000056",	--cmp loopadr, tailadr
+    x"7200005A",	--cmp loopadr, tailadr
     x"80200000",	--beq end
-    x"00000016",	--end adr
-    x"22000057",	--store gr2 i loopadr($21)
-    x"20300057",	--store gr0 i det som loopadrs pekare pekar på (inception)
+    x"00000017",	--end adr
+    x"2200005B",	--store gr2 i loopadr($21)
+    x"2030005B",	--store gr0 i det som loopadrs pekare pekar på (inception)
     x"60200000",	--bra loop
-    x"0000000E",	--loop adr
+    x"0000000F",	--loop adr
 
     --SHUFFLE
-    x"00100055", --16  --load det som head adr pekar på i gr0
-    x"21100055",       --store gr1 i det som headadr pekar på
-    x"02000055",       --load headadr i gr2
+    x"00100059", --17  --load det som head adr pekar på i gr0
+    x"21100059",       --store gr1 i det som headadr pekar på
+    x"02000059",       --load headadr i gr2
     x"32200000",                        --loop $3
     x"00000001",  
-    x"72000056",	--cmp gr2 med tailadr
-    x"E0000000", -- beep
+    x"7200005A",	--cmp gr2 med tailadr
     x"80200000",    --beq END
     x"00000027", -- hoppa till end
-    x"22000057",    --store gr2 i loopadr
-    x"01100057",	--load det loopadr pekar på i gr1
-    x"20100057",	--store gr0 i det loopadr pekar på
-    x"21000058",	--store gr1 i tmp
-    x"00000058",	--load tmp till gr0
+    x"2200005B",    --store gr2 i loopadr
+    x"0110005B",	--load det loopadr pekar på i gr1
+    x"2010005B",	--store gr0 i det loopadr pekar på
+    x"2100005C",	--store gr1 i tmp
+    x"0000005C",	--load tmp till gr0
     x"60200000",	--bra loop
-    x"00000019", 	--hoppa till loop
+    x"0000001A", 	--hoppa till loop
     x"E0000000",  --26                      --end $10
 
 
     --demo loop LÄGG/TA BORT
     x"00200000",  --load 1 till gr0			
     x"00000002",
-    x"02000055",   --load headadr till gr2
+    x"02000059",   --load headadr till gr2
     x"E0000000",   	  
-    x"20300055",	--store 2 i det som headadrs pekare pekar på (inception)
+    x"20300059",	--store 2 i det som headadrs pekare pekar på (inception)
     x"32000002",            --add med de som finns i 2            --loop
-    x"72000056",	--cmp loopadr, tailadr
+    x"7200005A",	--cmp loopadr, tailadr
     x"80200000",	--beq end
     x"00000034",	--end adr
-    x"22000057",	--store gr2 i loopadr($21)
-    x"20300057",	--store gr0 i det som loopadrs pekare pekar på (inception)
+    x"2200005B",	--store gr2 i loopadr($21)
+    x"2030005B",	--store gr0 i det som loopadrs pekare pekar på (inception)
     x"60200000",	--bra loop
     x"0000002C",--33	--loop adr
 
@@ -160,7 +160,7 @@ architecture Behavioral of proj is
 
 
      x"02200000",       -- load FFFF till gr2   /YTTRE
-     x"000000FF",
+     x"00000009",
      x"42200000",       -- sub gr2 med 1 /YTTRE -- LOOP
      x"00000001",       --
      x"00200000",       -- load 4800 till gr0
@@ -176,34 +176,40 @@ architecture Behavioral of proj is
      x"90200000",                       --bge hoppa till LOOP $3 //yttre
      x"00000036",   --43                    --  //yttre
 
-     
+
+    --
+     x"00200000",
+     x"00000061", -- offset
+     x"2000005D",
+    
      x"00200000",       -- load 4800 till gr0
      x"000012C0",
-     x"40200000",  	-- SUB gr0      -- traloop              
+     x"40200000",  	-- SUB gr0      -- traloop  --49            
      x"00000001",       -- 1 till gr0                  
-     x"B0000059",	-- TRA tileadr
-     x"02000059",       -- load till gr 2 i tileadr        
-     x"3200004D",       -- ADD 1 till gr2, lagrad i 4D
-     x"22000059",       -- store gr2 i tileadr             
+     x"B000005D",	-- TRA tileadr
+     x"0200005D",       -- load till gr 2 i tileadr        
+     x"3200004A",       -- ADD 1 till gr2, lagrad i 4A
+     x"2200005D",       -- store gr2 i tileadr             
      x"70200000",       -- CMP gr0 och 1       
      x"00000001",       --                     
-     x"90200000",       -- bge hoppa till traloop $14  
-     x"00000046",       -- traloop adr
+     x"90200000",       -- bge hoppa till traloop   
+     x"00000049",       -- traloop adr
      x"60200000",
+     x"00000000",
      x"00000000",
      x"00000005",	--xhead
      x"00000034",	--yhead
-     x"0000005D",	--offset	
-     x"0000131D",	--headadr
-     x"00001322",	--tailadr
+     x"00000061",	--offset	
+     x"00001321",	--headadr
+     x"00001326",	--tailadr
      x"00000000",	--loopadr
      x"00000000",	--tmp
-     x"0000005D",	--tileadr
+     x"00000061",	--tileadr
      x"00000000",
      x"00000000",
      x"00000000",
                     
- --5D
+ --61
 x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002", 
  
 x"00000002",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000002", 
