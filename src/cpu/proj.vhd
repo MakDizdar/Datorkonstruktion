@@ -95,68 +95,167 @@ architecture Behavioral of proj is
   type p_mem_t is array (0 to 5000) of unsigned(31 downto 0);
   constant p_mem_c : p_mem_t :=
 
-  (   	--translate 
-    x"00000056",
-    x"30200000",
+  (
+    X"020000AD",                        --dir
+    x"75200000",
+    x"00000017",
+    x"80200000",
+    x"00000013",                      --hoppa till isdown
+    x"75200000",
     x"00000001",
-    x"20000056",
-    x"01000057",
+    x"80200000",
+    x"00000019",                     --hoppa till isright
+    x"75200000",
+    x"00000013",
+    x"80200000",
+    x"0000001F",                        -- hoppa till isup
+    x"75200000",
+    x"00000004",
+    x"80200000",
+    x"00000025",                      --hoppa till isleft
+    x"60200000",
+    x"0000002A",                        --hoppa till end
+    x"72200000",	--$13	--isdown
+    x"00000013",
+    x"80200000",
+    x"0000002A",                         --hoppa till end
+    x"60200000",
+    x"00000029",                      --hoppa till newdir
+    x"72200000",		--isright
+    x"00000004",
+    x"80200000",
+    x"0000002A",                         --hoppa till end
+    x"60200000",
+    x"00000029",                      --hoppa till newdir
+    x"72200000",		--isup
+    x"00000017",
+    x"80200000",
+    x"0000002A",                         --hoppa till end
+    x"60200000",
+    x"00000029",                      --hoppa till new 
+    x"72200000",		--isleft
+    x"00000001",
+    x"80200000",
+    x"0000002A",
+    x"250000AD",       --newdir  --$29
+
+
+-------------------------------------------------------------------------------
+-- ----------
+-------------------------------------------------------------------------------
+
+    x"000000AD",                     --dir
+    x"020000A5",                       --xhead
+    x"030000A6",                       --yhead
+
+    x"70200000",
+    x"00000017",
+    x"80200000",
+    x"0000003F",                        --hoppa till up--30
+
+    x"70200000",
+    x"00000013",
+    x"80200000",
+    x"00000043",                        --hoppa till down
+
+    x"70200000",
+    x"00000001",
+    x"80200000",
+    x"00000047",                        --hoopa till left
+
+    x"70200000",
+    x"00000004",
+    x"80200000",
+    x"0000004B",                       --hoppa till right
+
+    x"60200000",
+    x"0000004F",                        --hoppa till end
+
+    x"43200000",        --up
+    x"00000001",                        --40
+    x"60200000",
+    x"0000004D",                --hoppa till store_value
+
+    x"33200000",        --down
+    x"00000001",
+    x"60200000",
+    x"0000004D",                --hoppa till store_value
+
+    x"42200000",        --left
+    x"00000001",
+    x"60200000",
+    x"0000004D",                --hoppa till store_value
+
+    x"32200000",       --right
+    x"00000001",
+
+    x"230000A6",                       --store_values --yhead
+    x"220000A5",                       --4E            --xhead
+
+
+
+    
+
+    --translate 
+    x"000000A5",                        --xhead
+    x"30200000",
+    x"00000000",
+    x"200000A5",                        --xhead
+    x"010000A6",                        --yhead
     x"A1200000",
-    x"00000050",
-    x"31000056",
-    x"31000002",
+    x"0000004F",
+    x"310000A5",               --add   --xhead
+    x"3100006A",               --add med det som finns i 6A
     x"31200000",
-    x"00000058",
+    x"000000B0",                        --offsets värde
 
     --demo loop LÄGG/TA BORT
-    x"00200000",  --load 1 till gr0			
+    x"00200000",  --load 5(svart) till gr0    --5A			
     x"00000005",
-    x"02000059",   --load F till gr2  	  
-    x"20300059",	--store 1 i det som Fs pekare pekar på (inception)
-    x"32000002",                        --loop
-    x"7200005A",	--cmp loopadr, tailadr
+    x"020000A8",   --load headadr till gr2  	  
+    x"203000A8",	--store 5 i det som headadrs pekare pekar på (inception)
+    x"3200006A",                        --loop add med det sok finns i 6A
+    x"720000A9",	--cmp loopadr, tailadr
     x"80200000",	--beq end
-    x"00000017",	--end adr
-    x"2200005B",	--store gr2 i loopadr($21)
-    x"2030005B",	--store gr0 i det som loopadrs pekare pekar på (inception)
+    x"00000066",	--end adr
+    x"220000AA",	--store gr2 i loopadr($21)
+    x"203000AA",	--store gr0 i det som loopadrs pekare pekar på (inception)
     x"60200000",	--bra loop
-    x"0000000F",	--loop adr
+    x"0000005E",	--loop adr
 
     --SHUFFLE
-    x"00100059", --17  --load det som head adr pekar på i gr0
-    x"21100059",       --store gr1 i det som headadr pekar på
-    x"02000059",       --load headadr i gr2
+    x"001000A8", --66  --load det som head adr pekar på i gr0
+    x"211000A8",       --store gr1 i det som headadr pekar på
+    x"020000A8",       --load headadr i gr2
     x"32200000",                        --loop $3
     x"00000001",  
-    x"7200005A",	--cmp gr2 med tailadr
+    x"720000A9",	--cmp gr2 med tailadr
     x"80200000",    --beq END
-    x"00000027", -- hoppa till end
-    x"2200005B",    --store gr2 i loopadr
-    x"0110005B",	--load det loopadr pekar på i gr1
-    x"2010005B",	--store gr0 i det loopadr pekar på
-    x"2100005C",	--store gr1 i tmp
-    x"0000005C",	--load tmp till gr0
+    x"00000076", -- hoppa till end
+    x"220000AA",    --store gr2 i loopadr
+    x"011000AA",	--load det loopadr pekar på i gr1
+    x"201000AA",	--store gr0 i det loopadr pekar på
+    x"210000AB",	--store gr1 i tmp
+    x"000000AB",	--load tmp till gr0
     x"60200000",	--bra loop
-    x"0000001A", 	--hoppa till loop
-    x"E0000000",  --26                      --end $10
+    x"00000069", 	--hoppa till loop
+    x"E0000000",  --75                      --end $10
 
 
     --demo loop LÄGG/TA BORT
     x"00200000",  --load 1 till gr0			
     x"00000002",
-    x"02000059",   --load headadr till gr2
+    x"020000A8",   --load headadr till gr2
     x"E0000000",   	  
-    x"20300059",	--store 2 i det som headadrs pekare pekar på (inception)
-    x"32000002",            --add med de som finns i 2            --loop
-    x"7200005A",	--cmp loopadr, tailadr
+    x"203000A8",	--store 2 i det som headadrs pekare pekar på (inception)
+    x"3200006A",            --add med de som finns i 6A            --loop
+    x"720000A9",	--cmp loopadr, tailadr
     x"80200000",	--beq end
-    x"00000034",	--end adr
-    x"2200005B",	--store gr2 i loopadr($21)
-    x"2030005B",	--store gr0 i det som loopadrs pekare pekar på (inception)
+    x"00000083",	--end adr
+    x"220000AA",	--store gr2 i loopadr($21)
+    x"203000AA",	--store gr0 i det som loopadrs pekare pekar på (inception)
     x"60200000",	--bra loop
-    x"0000002C",--33	--loop adr
-
-
+    x"0000007B",--82	--loop adr
 
 
      x"02200000",       -- load FFFF till gr2   /YTTRE
@@ -170,46 +269,44 @@ architecture Behavioral of proj is
      x"70200000",       -- CMP gr0 och 1      /LOOP
      x"00000001",       --                    /LOOP
      x"90200000",       -- bge hoppa till LOOP2   /LOOP
-     x"0000003A",       --                    /LOOP
+     x"00000089",       -- loop2 adr                   /LOOP
      x"72200000",       -- CMP gr2 och 1
      x"00000001",
      x"90200000",                       --bge hoppa till LOOP $3 //yttre
-     x"00000036",   --43                    --  //yttre
-
-
-    --
+     x"00000085",   --92  loop adr                  --  //yttre
+    
      x"00200000",
-     x"00000061", -- offset
-     x"2000005D",
+     x"000000B0", -- det som ska finnas i 
+     x"200000AC",                  --tiladr
     
      x"00200000",       -- load 4800 till gr0
      x"000012C0",
-     x"40200000",  	-- SUB gr0      -- traloop  --49            
+     x"40200000",  	-- SUB gr0      -- traloop  --98            
      x"00000001",       -- 1 till gr0                  
-     x"B000005D",	-- TRA tileadr
-     x"0200005D",       -- load till gr 2 i tileadr        
-     x"3200004A",       -- ADD 1 till gr2, lagrad i 4A
-     x"2200005D",       -- store gr2 i tileadr             
+     x"B00000AC",	-- TRA tileadr
+     x"020000AC",       -- load till gr 2 i tileadr        
+     x"32000099",       -- ADD 1 till gr2, lagrad i 99
+     x"220000AC",       -- store gr2 i tileadr             
      x"70200000",       -- CMP gr0 och 1       
      x"00000001",       --                     
      x"90200000",       -- bge hoppa till traloop   
-     x"00000049",       -- traloop adr
+     x"00000098",       -- traloop adr
      x"60200000",
      x"00000000",
      x"00000000",
-     x"00000005",	--xhead
-     x"00000034",	--yhead
-     x"00000061",	--offset	
-     x"00001321",	--headadr
-     x"00001326",	--tailadr
+     x"00000005",	--xhead    --A5
+     x"00000034",	--yhead    --A6
+     x"000000B0",	--offset	
+     x"00001370",	--headadr
+     x"00001375",	--tailadr
      x"00000000",	--loopadr
      x"00000000",	--tmp
-     x"00000061",	--tileadr
-     x"00000000",
+     x"000000B0",	--tileadr
+     x"00000001",       --dir 
      x"00000000",
      x"00000000",
                     
- --61
+ --B0
 x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002", 
  
 x"00000002",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000005",x"00000002", 
@@ -334,8 +431,6 @@ x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"00000002",x"000000
      x"00000A12",
      x"00000A62",
      x"00000AB2",
- 
-
      x"00000B02",
      x"00000000",
      x"00000000",
@@ -508,6 +603,9 @@ begin
        
       elsif (ALU = "0110") then
         AR <= AR and ('0' & DATA_BUS);
+
+      elsif (ALU = "0011") then
+        AR <= 0;
           
       elsif (ALU = "0111") then
         AR <= AR or ('0' & DATA_BUS);
