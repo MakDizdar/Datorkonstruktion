@@ -30,16 +30,15 @@ architecture Behavioral of VGA_MOTOR is
   signal        Clk25_q         : std_logic;                   -- Gris
   signal        Clk25_q_plus    : std_logic;                   -- Gris+
   signal        Enpuls_Clk25         : std_logic;                   -- Gris Enpuls
-  
+ 
   signal 	tilePixel       : std_logic_vector(2 downto 0);	-- Tile pixel data
   signal	tileAddr	: unsigned(7 downto 0);	-- Tile address
   signal 	blank		: std_logic;
 
-	
 
   
   -- Tile memory typ
-  type ram_t is array (0 to 95) of std_logic_vector(2 downto 0);
+  type ram_t is array (0 to 127) of std_logic_vector(2 downto 0);
 
 -- Tile memory
   signal tileMem : ram_t := 
@@ -71,7 +70,17 @@ architecture Behavioral of VGA_MOTOR is
 		"000","000","000","000", 	--black(x"5")
 		"000","000","000","000",
 		"000","000","000","000",
-		"000","000","000","000"
+		"000","000","000","000",
+
+                "011","011","011","011", 	--teal(x"6")
+		"011","011","011","011",
+		"011","011","011","011",
+		"011","011","011","011",
+
+                "101","101","101","101", 	--magenta(x"7")
+		"101","101","101","101",
+		"101","101","101","101",
+		"101","101","101","101"
 		);
 		  
 begin
